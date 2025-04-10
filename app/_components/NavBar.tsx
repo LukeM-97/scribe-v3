@@ -1,24 +1,8 @@
 "use client";
 
 import { useState } from "react";
-import {
-  IconSettings,
-  IconChevronLeft,
-  IconArrowBackUp,
-  IconArrowForwardUp,
-  IconScissors,
-  IconCopy,
-  IconClipboard,
-  IconLayoutGrid,
-  IconLayoutList,
-} from "@tabler/icons-react";
+import { IconSettings } from "@tabler/icons-react";
 import { Button } from "./ui/Button";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "./ui/DropdownMenu";
 
 export default function Navbar() {
   const [viewMode, setViewMode] = useState<"grid" | "list">("grid");

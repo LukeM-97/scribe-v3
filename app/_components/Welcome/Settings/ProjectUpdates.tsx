@@ -1,10 +1,6 @@
 import React from "react";
 import { ScrollArea } from "@/app/_components/ui/SrollArea";
-import {
-  Avatar,
-  AvatarFallback,
-  AvatarImage,
-} from "@/app/_components/ui/Avatar";
+import { Avatar, AvatarFallback } from "@/app/_components/ui/Avatar";
 
 const ProjectUpdates: React.FC = () => {
   const updates = [

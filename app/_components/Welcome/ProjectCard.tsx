@@ -29,7 +29,6 @@ import {
 import {
   Tooltip,
   TooltipContent,
-  TooltipProvider,
   TooltipTrigger,
 } from "@/app/_components/ui/ToolTip";
 import {

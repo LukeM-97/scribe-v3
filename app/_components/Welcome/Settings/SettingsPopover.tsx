@@ -8,27 +8,15 @@ import {
 import {
   Card,
   CardContent,
-  CardDescription,
   CardFooter,
   CardHeader,
   CardTitle,
 } from "@/app/_components/ui/Card";
 import { Separator } from "@/app/_components/ui/Separator";
-import {
-  Avatar,
-  AvatarFallback,
-  AvatarImage,
-} from "@/app/_components/ui/Avatar";
 import { Input } from "@/app/_components/ui/Input";
-import { Textarea } from "@/app/_components/ui/Textarea";
-import { Badge } from "@/app/_components/ui/Badge";
-import {
-  IconSettings,
-  IconShare,
-  IconExternalLink,
-  IconTrash,
-  IconDots,
-} from "@tabler/icons-react";
+import { Textarea } from "@/app/_components/ui/TextArea";
+// import { Badge } from "@/app/_components/ui/Badge";
+import { IconShare, IconTrash, IconDots } from "@tabler/icons-react";
 import { toast } from "sonner";
 
 import ProjectUpdates from "./ProjectUpdates";
@@ -135,12 +123,12 @@ const ProjectSettings: React.FC = () => {
                 Translated
               </div>
               <div className="flex items-center justify-between">
-                <Badge
+                {/* <Badge
                   variant="outline"
                   className="px-3 py-1 border-primary/20 text-muted-foreground"
                 >
                   87 / 172 chapters
-                </Badge>
+                </Badge> */}
               </div>
             </div>
 
