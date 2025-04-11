@@ -17,6 +17,21 @@ import {
   IconMovie,
 } from "@tabler/icons-react";
 import {
+  ContextMenu,
+  ContextMenuItem,
+  ContextMenuTrigger,
+  ContextMenuContent,
+  ContextMenuRadioGroup,
+  ContextMenuRadioItem,
+  ContextMenuSeparator,
+  ContextMenuLabel,
+  ContextMenuCheckboxItem,
+  ContextMenuShortcut,
+  ContextMenuSub,
+  ContextMenuSubContent,
+  ContextMenuSubTrigger,
+} from "@/app/_components/ui/ContextMenu";
+import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
@@ -45,6 +60,7 @@ import { Button } from "@/app/_components/ui/Button";
 import { Progress } from "@/app/_components/ui/Progress";
 import { cn } from "@/app/_lib/clsx";
 import Image from "next/image";
+import ProjectSettings from "./Settings/SettingsPopover";
 
 // Types
 interface ProjectCardProps {
@@ -219,49 +235,16 @@ const CollaboratorsPopover = () => (
 );
 
 // Project Settings Dropdown Component
-const ProjectSettingsDropdown = () => (
-  <Tooltip>
-    <DropdownMenu>
-      <DropdownMenuTrigger asChild>
-        <TooltipTrigger asChild>
-          <Button
-            variant="outline"
-            size="icon"
-            className="h-10 w-10 rounded-md shadow-none"
-          >
-            <IconDots className="h-5 w-5" />
-          </Button>
-        </TooltipTrigger>
-      </DropdownMenuTrigger>
-      <DropdownMenuContent align="end" className="w-56">
-        <DropdownMenuItem>
-          <span>Share</span>
-          <IconChevronRight className="ml-auto h-4 w-4" />
-        </DropdownMenuItem>
-        <DropdownMenuItem>Rename</DropdownMenuItem>
-        <DropdownMenuSub>
-          <DropdownMenuSubTrigger>
-            <span>Save as...</span>
-          </DropdownMenuSubTrigger>
-          <DropdownMenuSubContent>
-            <DropdownMenuItem>Export as PDF</DropdownMenuItem>
-          </DropdownMenuSubContent>
-        </DropdownMenuSub>
-        <DropdownMenuItem>Duplicate</DropdownMenuItem>
-        <DropdownMenuSeparator />
-        <DropdownMenuItem>
-          <span className="flex items-center gap-2">
-            <IconSettings className="h-4 w-4" />
-            <span>Settings</span>
-          </span>
-        </DropdownMenuItem>
-        <DropdownMenuSeparator />
-        <DropdownMenuItem className="text-destructive">Delete</DropdownMenuItem>
-      </DropdownMenuContent>
-    </DropdownMenu>
-    <TooltipContent>Settings</TooltipContent>
-  </Tooltip>
-);
+const ProjectSettingsDropdown = () => {
+  const [isOpen, setIsOpen] = useState(false);
+
+  return (
+    <Tooltip>
+      <ProjectSettings />
+      <TooltipContent>Settings</TooltipContent>
+    </Tooltip>
+  );
+};
 
 // Progress Bar Component
 const ProgressBar = ({
@@ -361,66 +344,101 @@ export function ProjectCard({
   onOpen,
   className,
 }: ProjectCardProps) {
+  const [open, setOpen] = useState(false);
+  const [isSettingsOpen, setIsSettingsOpen] = useState(false);
+  const [contextMenuOpen, setContextMenuOpen] = useState(false);
+  const [position, setPosition] = useState<{ x: number; y: number } | null>(
+    null
+  );
+
+  const handleContextMenu = (event: React.MouseEvent) => {
+    event.preventDefault();
+    setPosition({ x: event.clientX, y: event.clientY });
+    setOpen(true);
+  };
+
   return (
-    <div
-      className={cn(
-        "rounded-lg p-4 border border-zinc-200 bg-card shadow-sm",
-        className
-      )}
-    >
-      <ProjectHeader
-        title={title}
-        sourceLanguage={sourceLanguage}
-        sourceCode={sourceCode}
-        targetLanguage={targetLanguage}
-        targetCode={targetCode}
-        hasText={hasText}
-        hasAudio={hasAudio}
-        hasImages={hasImages}
-        hasTable={hasTable}
-        hasVideo={hasVideo}
-        hasMap={hasMap}
-      />
-
-      <div className="mt-2 aspect-video relative h-[78px] w-full overflow-hidden">
-        <Image
-          src="/images/project.jpg"
-          alt="Project background"
-          className="h-full w-full object-cover"
-          fill
+    <ContextMenu>
+      <ContextMenuTrigger
+        className={cn(
+          "rounded-lg p-4 border border-zinc-200 bg-card shadow-sm",
+          className
+        )}
+      >
+        <ProjectHeader
+          title={title}
+          sourceLanguage={sourceLanguage}
+          sourceCode={sourceCode}
+          targetLanguage={targetLanguage}
+          targetCode={targetCode}
+          hasText={hasText}
+          hasAudio={hasAudio}
+          hasImages={hasImages}
+          hasTable={hasTable}
+          hasVideo={hasVideo}
+          hasMap={hasMap}
         />
-      </div>
 
-      <div className="pt-2">
-        <div className="flex items-center justify-between text-sm text-[var(--muted-foreground)]">
-          <div className="flex items-center gap-2">
-            <span>Last update by</span>
-            <Avatar className="h-5 w-5">
-              <AvatarImage
-                src="/placeholder.svg?height=20&width=20"
-                alt={lastUpdatedBy}
-              />
-              <AvatarFallback className="text-xs">
-                {lastUpdatedBy.charAt(0)}
-              </AvatarFallback>
-            </Avatar>
-            <span className="text-[var(--foreground)]">{lastUpdatedBy}</span>
-            <span>on</span>
-            <span className="text-[var(--foreground)]">{lastUpdatedOn}</span>
-          </div>
-          <span className="text-[var(--muted-foreground) text-xs">
-            {timestamp}
-          </span>
+        <div className="mt-2 aspect-video relative h-[78px] w-full overflow-hidden">
+          <Image
+            src="/images/project.jpg"
+            alt="Project background"
+            className="h-full w-full object-cover"
+            fill
+          />
         </div>
 
-        <ProjectActions onOpen={onOpen} />
-        <ProgressBar
-          progress={progress}
-          translatedChapters={translatedChapters}
-          totalChapters={totalChapters}
-        />
-      </div>
-    </div>
+        <div className="pt-2">
+          <div className="flex items-center justify-between text-sm text-[var(--muted-foreground)]">
+            <div className="flex items-center gap-2">
+              <span>Last update by</span>
+              <Avatar className="h-5 w-5">
+                <AvatarImage
+                  src="/placeholder.svg?height=20&width=20"
+                  alt={lastUpdatedBy}
+                />
+                <AvatarFallback className="text-xs">
+                  {lastUpdatedBy.charAt(0)}
+                </AvatarFallback>
+              </Avatar>
+              <span className="text-[var(--foreground)]">{lastUpdatedBy}</span>
+              <span>on</span>
+              <span className="text-[var(--foreground)]">{lastUpdatedOn}</span>
+            </div>
+            <span className="text-[var(--muted-foreground) text-xs">
+              {timestamp}
+            </span>
+          </div>
+
+          <ProjectActions onOpen={onOpen} />
+          <ProgressBar
+            progress={progress}
+            translatedChapters={translatedChapters}
+            totalChapters={totalChapters}
+          />
+        </div>
+      </ContextMenuTrigger>
+      <ContextMenuContent className="w-64">
+        <ContextMenuSub>
+          <ContextMenuSubTrigger inset>Share</ContextMenuSubTrigger>
+          <ContextMenuSubContent className="w-48">
+            <ContextMenuItem>Save as...</ContextMenuItem>
+            <ContextMenuItem>Export PDF</ContextMenuItem>
+          </ContextMenuSubContent>
+        </ContextMenuSub>
+        <ContextMenuItem inset>Rename</ContextMenuItem>
+        <ContextMenuItem inset>Duplicate</ContextMenuItem>
+        <ContextMenuItem inset>
+          More settings...
+          <IconDots className="ml-auto h-4 w-4" />
+        </ContextMenuItem>
+
+        <ContextMenuSeparator />
+        <div className="text-[var(--destructive)]/90  px-2 py-1.5 pl-8 text-sm cursor-default hover:bg-[var(--accent)] hover:text-red-600">
+          Delete
+        </div>
+      </ContextMenuContent>
+    </ContextMenu>
   );
 }
 

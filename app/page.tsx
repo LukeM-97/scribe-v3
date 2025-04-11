@@ -44,6 +44,7 @@ export default function Home() {
             New project
           </Button>
         </div>
+
         <ProjectSortDropdown />
       </div>
 
